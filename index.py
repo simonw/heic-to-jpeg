@@ -40,6 +40,10 @@ async def homepage(request):
         h = int(h)
         image.thumbnail((w, h))
 
+    # ?bw= converts to black and white
+    if request.query_params.get("bw"):
+        image = image.convert("L")
+
     jpeg = io.BytesIO()
     image.save(jpeg, "JPEG")
     return Response(
