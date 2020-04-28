@@ -44,8 +44,14 @@ async def homepage(request):
     if request.query_params.get("bw"):
         image = image.convert("L")
 
+    # ?q= sets the quality - defaults to 75
+    quality = 75
+    q = request.query_params.get("q")
+    if q and q.isdigit() and 1 <= int(q) <= 100:
+        quality = int(q)
+        
     jpeg = io.BytesIO()
-    image.save(jpeg, "JPEG")
+    image.save(jpeg, "JPEG", quality=quality)
     return Response(
         jpeg.getvalue(),
         media_type="image/jpeg",
